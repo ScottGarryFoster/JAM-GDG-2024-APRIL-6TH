@@ -23,6 +23,9 @@ namespace Controllers
         [SerializeField]
         private int skillsMax;
 
+        private int hiddenGameplay;
+        private int hiddenTools;
+
         [Header("UI elements")]
         public Scrollbar scrollbarLooks;
         public TextMeshProUGUI tmpLooks;
@@ -43,6 +46,31 @@ namespace Controllers
             marketing = 0;
         }
 
+        public void WorkOnPrograming()
+        {
+            WorkOnProject(ProjectTask.Gameplay);
+        }
+        
+        public void WorkOnTools()
+        {
+            WorkOnProject(ProjectTask.Tools);
+        }
+        
+        public void WorkOnEnvironment()
+        {
+            WorkOnProject(ProjectTask.Environment);
+        }
+        
+        public void WorkOnShaders()
+        {
+            WorkOnProject(ProjectTask.Shaders);
+        }
+        
+        public void WorkOnModels()
+        {
+            WorkOnProject(ProjectTask.Models);
+        }
+
         public void WorkOnProject(ProjectTask task)
         {
             ExecuteBugs(task);
@@ -57,31 +85,116 @@ namespace Controllers
             switch (task)
             {
                 case ProjectTask.Environment:
-                    this.art += (int) (this.art * 0.15f);
-                    break;
                 case ProjectTask.Shaders:
-                    this.art += (int) (this.art * 0.15f);
-                    break;
                 case ProjectTask.Models:
-                    this.art += (int) (this.art * 0.1f);
-                    break;
-                case ProjectTask.Gameplay:
-                    this.gameplay += (int) (this.gameplay * 0.15f);
-                    break;
                 case ProjectTask.Tools:
-                    this.gameplay += (int) (this.gameplay * 0.1f);
-                    this.art += (int) (this.gameplay * 0.1f);
-                    break;
-                case ProjectTask.Conference:
-                    this.marketing += (int) (this.art * 0.1f) + (int) (this.gameplay * 0.1f);
-                    break;
-                case ProjectTask.SocialMedia:
-                    this.marketing += (int) (this.art * 0.1f) + (int) (this.gameplay * 0.1f);
-                    break;
-                case ProjectTask.OnlineAds:
-                    this.marketing += (int) (this.art * 0.05f) + (int) (this.gameplay * 0.05f);
+                    if (this.art == 0)
+                    {
+                        this.art += Random.Range(1, 5);
+                    }
+
                     break;
             }
+            
+            switch (task)
+            {
+                case ProjectTask.Gameplay:
+                case ProjectTask.Tools:
+                    if (this.gameplay == 0)
+                    {
+                        this.gameplay += Random.Range(1, 5);
+                    }
+
+                    break;
+            }
+
+            int boost = 0;
+            switch (task)
+            {
+                case ProjectTask.Environment:
+                    this.art += GetBoost((int) (this.art * 0.1f));
+                    break;
+                case ProjectTask.Shaders:
+                    this.art += GetBoost((int) (this.art * 0.1f));
+                    break;
+                case ProjectTask.Models:
+                    this.art += GetBoost((int) (this.art * 0.1f));
+                    break;
+                case ProjectTask.Gameplay:
+                    if (this.hiddenTools > 4 && this.gameplay > 15)
+                    {
+                        this.gameplay += GetBoost((int) (this.gameplay * 0.2f));
+                    }
+                    else
+                    {
+                        this.gameplay += GetBoost((int) (this.gameplay * 0.1f));
+                    }
+                    break;
+                case ProjectTask.Tools:
+                    this.hiddenTools += Random.Range(0, 2);
+                    if (this.hiddenTools > 5)
+                    {
+                        if (this.gameplay > 10)
+                        {
+                            this.gameplay += GetBoost((int) (this.gameplay * 0.1f));
+                        }
+                        else
+                        {
+                            this.gameplay += Random.Range(1, 3);
+                        }
+
+                        if (this.art > 10)
+                        {
+                            this.art += GetBoost((int) (this.art * 0.1f));
+                        }
+                        else
+                        {
+                            this.art += Random.Range(1, 3);
+                        }
+                    }
+                    else
+                    {
+                        if (this.gameplay > 15)
+                        {
+                            this.gameplay += GetBoost((int) (this.gameplay * 0.05f));
+                        }
+                        else
+                        {
+                            this.gameplay += Random.Range(1, 3);
+                        }
+                        
+                        if (this.art > 15)
+                        {
+                            this.art += GetBoost((int) (this.art * 0.05f));
+                        }
+                        else
+                        {
+                            this.art += Random.Range(1, 3);
+                        }
+
+                        
+                    }
+                    break;
+                case ProjectTask.Conference:
+                    this.marketing += GetBoost((int) (this.art * 0.1f) + (int) (this.gameplay * 0.1f));
+                    break;
+                case ProjectTask.SocialMedia:
+                    this.marketing += GetBoost((int) (this.art * 0.1f) + (int) (this.gameplay * 0.1f));
+                    break;
+                case ProjectTask.OnlineAds:
+                    this.marketing += GetBoost((int) (this.art * 0.05f) + (int) (this.gameplay * 0.05f));
+                    break;
+            }
+        }
+
+        private int GetBoost(int i)
+        {
+            if (i <= 0)
+            {
+                return Random.Range(1, 5);
+            }
+
+            return i;
         }
 
         private void ExecuteBugs(ProjectTask task)
@@ -119,8 +232,8 @@ namespace Controllers
 
 
             this.tmpLooks.text = $"{this.art} / {this.skillsMax}";
-            this.tmpLooks.text = $"{this.gameplay} / {this.skillsMax}";
-            this.tmpLooks.text = $"{this.marketing} / {this.skillsMax}";
+            this.tmpGameplay.text = $"{this.gameplay} / {this.skillsMax}";
+            this.tmpReach.text = $"{this.marketing} / {this.skillsMax}";
         }
 
 

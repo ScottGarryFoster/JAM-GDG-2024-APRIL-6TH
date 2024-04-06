@@ -6,7 +6,7 @@ namespace Controllers
     {
         public static float GetProgressBarValue(float given, float max)
         {
-            return Mathf.Round(max / given);
+            return given / max;
         }
     }
 }
