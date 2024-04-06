@@ -37,9 +37,11 @@ namespace Controllers
         
         [Header("OTHER")]
         public PersonalSkills PersonalSkills;
-        
+
         public void Reset()
         {
+            
+            
             art = 0;
             gameplay = 0;
             marketing = 0;
