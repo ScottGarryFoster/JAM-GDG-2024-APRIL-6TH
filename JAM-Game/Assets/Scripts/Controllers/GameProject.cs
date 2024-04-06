@@ -74,7 +74,19 @@ namespace Controllers
             
             MainTasks(task, effectivenessOfTask);
 
+            ClampAllStats();
+            
             UpdateUI();
+        }
+
+        private void ClampAllStats()
+        {
+            this.art = this.art < this.skillsMax ? this.art : this.skillsMax;
+            this.gameplay = this.gameplay < this.skillsMax ? this.gameplay : this.skillsMax;
+            this.marketing = this.marketing < this.skillsMax ? this.marketing : this.skillsMax;
+            this.hiddenTools = this.hiddenTools < this.skillsMax ? this.hiddenTools : this.skillsMax;
+            this.hiddenGameplay = this.hiddenGameplay < this.skillsMax ? this.hiddenGameplay : this.skillsMax;
+            this.bugs = this.bugs < this.skillsMax ? this.bugs : this.skillsMax;
         }
 
         private void MainTasks(ProjectTask task, EffectivenessOfTask effectivenessOfTask)
@@ -275,6 +287,7 @@ namespace Controllers
 
         public void UpdateUI()
         {
+            ClampAllStats();
             this.scrollbarLooks.size = IHateStatics.GetProgressBarValue(this.art, this.skillsMax);
             this.scrollbarGameplay.size = IHateStatics.GetProgressBarValue(this.gameplay, this.skillsMax);
             this.scrollbarReach.size = IHateStatics.GetProgressBarValue(this.marketing, this.skillsMax);
@@ -285,6 +298,18 @@ namespace Controllers
             this.tmpReach.text = $"{this.marketing} / {this.skillsMax}";
         }
 
-
+        public void AddGameplayBoost(int amount)
+        {
+            this.gameplay += amount;
+            ClampAllStats();
+            this.UpdateUI();
+        }
+        
+        public void AddReachBoost(int amount)
+        {
+            this.marketing += amount;
+            ClampAllStats();
+            this.UpdateUI();
+        }
     }
 }

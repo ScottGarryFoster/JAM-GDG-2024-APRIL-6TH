@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using TMPro;
 using Unity.VisualScripting;
 using UnityEngine;
@@ -9,6 +10,7 @@ namespace Controllers
     public class GameEvents : MonoBehaviour
     {
         public GameProject GameProject;
+        public PersonalSkills PersonalSkills;
         
         public List<SingleEvent> Events;
 
@@ -24,7 +26,7 @@ namespace Controllers
         public int MedLevel;
         public int HardLevel;
         
-        private Stack<SingleEvent> eventsInPlay;
+        private Queue<SingleEvent> eventsInPlay;
         private SingleEvent currentEvent;
 
         private bool ifLoaded;
@@ -44,7 +46,7 @@ namespace Controllers
                 LoadEvents();
             }
             
-            this.currentEvent = this.eventsInPlay.Pop();
+            this.currentEvent = this.eventsInPlay.Dequeue();
 
             this.Description.text = this.currentEvent.Description;
             this.Left.text = SetOptionButtonText(this.currentEvent.Left);
@@ -52,7 +54,7 @@ namespace Controllers
 
             if (!this.currentEvent.OnlyUseOnce)
             {
-                this.eventsInPlay.Push(this.currentEvent);
+                this.eventsInPlay.Enqueue(this.currentEvent);
             }
         }
 
@@ -80,6 +82,7 @@ namespace Controllers
         {
             switch (optionDifficulty)
             {
+                case DifficultyOfEvent.Guaranteed: return "<color=#008000>[V.EASY]</color>";
                 case DifficultyOfEvent.Easy: return "<color=#008000>[EASY]</color>";
                 case DifficultyOfEvent.Medium: return "<color=#FF5733>[MED]</color>";
                 case DifficultyOfEvent.Hard: return "<color=#990000>[HARD]</color>";
@@ -90,11 +93,11 @@ namespace Controllers
 
         private void LoadEvents()
         {
-            this.eventsInPlay = new Stack<SingleEvent>();
+            this.eventsInPlay = new Queue<SingleEvent>();
             List<SingleEvent> shuffled = IHateStatics.Shuffle(this.Events, new System.Random());
             foreach (SingleEvent eo in shuffled)
             {
-                this.eventsInPlay.Push(eo);
+                this.eventsInPlay.Enqueue(eo);
             }
 
             this.Left.richText = true;
@@ -140,7 +143,7 @@ namespace Controllers
                     this.GameProject.WorkOnProject(option.WorkTask, effectivenessOfTask);
                     break;
                 case TypeOfEvent.Play: 
-                    //this.GameProject.WorkOnProject(option.PlayTask);
+                    PersonalSkills.PersonalTask(option.PlayTask, effectivenessOfTask);
                     break;
             }
         }
@@ -149,9 +152,11 @@ namespace Controllers
         {
             switch (optionDifficulty)
             {
+                case DifficultyOfEvent.Guaranteed: return true;
                 case DifficultyOfEvent.Easy: return StatIsAbove(EasyLevel, optionDifficultyStat);
                 case DifficultyOfEvent.Medium: return StatIsAbove(MedLevel, optionDifficultyStat);
                 case DifficultyOfEvent.Hard: return StatIsAbove(HardLevel, optionDifficultyStat);
+                default: throw new NotImplementedException($"{optionDifficulty.ToString()} not implemented");
             }
 
             return false;
@@ -165,9 +170,10 @@ namespace Controllers
                 case PlayerProjectStat.GameGameplay: return GameProject.gameplay > easyLevel;
                 case PlayerProjectStat.GameMarketing: return GameProject.marketing > easyLevel;
                 case PlayerProjectStat.GameBugs: return GameProject.bugs > easyLevel;
+                case PlayerProjectStat.PersonalSocialSkills: return PersonalSkills.Social > easyLevel;
+                case PlayerProjectStat.PersonalEnergyLevels: return PersonalSkills.Energy > easyLevel;
+                default: throw new NotImplementedException($"{optionDifficultyStat.ToString()} not implemented");
             }
-
-            return false;
         }
 
         public void PushForwards()
