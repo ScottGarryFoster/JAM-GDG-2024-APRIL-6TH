@@ -133,5 +133,15 @@ namespace Controllers
             ScrollbarEnergy.size = IHateStatics.GetProgressBarValue(Energy, 100);
             TextEnergy.text = $"{Energy} / 100";
         }
+
+        public void TakeEnergy(int takeAmount)
+        {
+            this.Energy -= takeAmount;
+            if (this.Energy < 0)
+            {
+                this.Energy = 0;
+            }
+            UpdateUI();
+        }
     }
 }

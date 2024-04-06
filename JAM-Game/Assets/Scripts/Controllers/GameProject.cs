@@ -35,6 +35,8 @@ namespace Controllers
         
         public int bugs;
         
+        [Header("OTHER")]
+        public PersonalSkills PersonalSkills;
         
         public void Reset()
         {
@@ -77,6 +79,21 @@ namespace Controllers
             ClampAllStats();
             
             UpdateUI();
+
+            TakeEnergy(effectivenessOfTask);
+        }
+
+        private void TakeEnergy(EffectivenessOfTask effectivenessOfTask)
+        {
+            int energy = 0;
+            switch (effectivenessOfTask)
+            {
+                case EffectivenessOfTask.Ineffective: energy = Random.Range(2, 9); break;
+                case EffectivenessOfTask.Effective: energy = Random.Range(1, 5); break;
+                case EffectivenessOfTask.CriticalHit: energy = Random.Range(0, 3); break;
+            }
+
+            PersonalSkills.TakeEnergy(energy);
         }
 
         private void ClampAllStats()
@@ -169,6 +186,17 @@ namespace Controllers
                 case ProjectTask.OnlineAds:
                     this.marketing += GetBoost((int) (this.art * 0.05f) + (int) (this.gameplay * 0.05f), effectivenessOfTask);
                     break;
+            }
+
+            if (this.bugs > 75)
+            {
+                this.gameplay -= Random.Range(0, 5);
+                this.art -= Random.Range(0, 5);
+            }
+            else if (this.bugs > 50)
+            {
+                this.gameplay -= Random.Range(0, 3);
+                this.art -= Random.Range(0, 3);
             }
         }
 

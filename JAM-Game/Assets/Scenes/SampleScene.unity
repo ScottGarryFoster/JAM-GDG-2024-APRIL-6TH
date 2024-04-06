@@ -4275,6 +4275,7 @@ MonoBehaviour:
   scrollbarReach: {fileID: 307789532}
   tmpReach: {fileID: 139444195}
   bugs: 0
+  PersonalSkills: {fileID: 1560659175}
 --- !u!114 &1560659173
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4341,6 +4342,55 @@ MonoBehaviour:
         feels much better. '
       FailureText: You try to implement some design work but the code is messy and
         untestable. This was not good code.
+    OnlyUseOnce: 0
+  - Description: You have a bunch of blocked programing tasks in your issues, but
+      you also have Boulders Gate 3 unfinished.
+    Left:
+      ButtonDescription: Pickup a new ticket.
+      TypeOfEvent: 0
+      Difficulty: 1
+      DifficultyStat: 5
+      ValueToBeat: 0
+      WorkTask: 3
+      PlayTask: 0
+      SuccessText: Getting back into it feels great. You unblock a bunch of new tasks
+        for the game. Onwards and upwards!
+      FailureText: You barely finish a task, this was not productive.
+    Right:
+      ButtonDescription: Play Games
+      TypeOfEvent: 1
+      Difficulty: 1
+      DifficultyStat: 5
+      ValueToBeat: 0
+      WorkTask: 3
+      PlayTask: 0
+      SuccessText: You play some video games and get inspried by the design.
+      FailureText: You feel relaxed but not as relaxed but in the back of your mind
+        is your project.
+    OnlyUseOnce: 0
+  - Description: It's the weekend, you are relaxed. It's time to work.
+    Left:
+      ButtonDescription: Work on the Envrionments
+      TypeOfEvent: 0
+      Difficulty: 0
+      DifficultyStat: 5
+      ValueToBeat: 0
+      WorkTask: 1
+      PlayTask: 0
+      SuccessText: You polish up and create new areas for the player. You create
+        new worlds for them to explore.
+      FailureText: N/A
+    Right:
+      ButtonDescription: Work on a new Tool
+      TypeOfEvent: 0
+      Difficulty: 0
+      DifficultyStat: 5
+      ValueToBeat: 0
+      WorkTask: 5
+      PlayTask: 0
+      SuccessText: You create new pipelines for procedural generation, organising
+        meta data and sorting out data entry for the back end design.
+      FailureText: N/A
     OnlyUseOnce: 0
   Description: {fileID: 550825696}
   Left: {fileID: 827696834}
