@@ -9,16 +9,13 @@ namespace Controllers
     public class GameProject : MonoBehaviour
     {
 
-        
+
         [Header("Stats")]
-        [SerializeField]
-        private int art;
-
-        [SerializeField]
-        private int gameplay;
-
-        [SerializeField]
-        private int marketing;
+        public int art;
+        
+        public int gameplay;
+        
+        public int marketing;
         
         [SerializeField]
         private int skillsMax;
@@ -36,7 +33,7 @@ namespace Controllers
         public Scrollbar scrollbarReach;
         public TextMeshProUGUI tmpReach;
         
-        private int bugs;
+        public int bugs;
         
         
         public void Reset()
@@ -71,16 +68,99 @@ namespace Controllers
             WorkOnProject(ProjectTask.Models);
         }
 
-        public void WorkOnProject(ProjectTask task)
+        public void WorkOnProject(ProjectTask task, EffectivenessOfTask effectivenessOfTask = EffectivenessOfTask.Effective)
         {
-            ExecuteBugs(task);
+            ExecuteBugs(task, effectivenessOfTask);
             
-            MainTasks(task);
+            MainTasks(task, effectivenessOfTask);
 
             UpdateUI();
         }
 
-        private void MainTasks(ProjectTask task)
+        private void MainTasks(ProjectTask task, EffectivenessOfTask effectivenessOfTask)
+        {
+            FromZeroAdd(task, effectivenessOfTask);
+
+            int boost = 0;
+            switch (task)
+            {
+                case ProjectTask.Environment:
+                    this.art += GetBoost((int) (this.art * 0.1f), effectivenessOfTask);
+                    break;
+                case ProjectTask.Shaders:
+                    this.art += GetBoost((int) (this.art * 0.1f), effectivenessOfTask);
+                    break;
+                case ProjectTask.Models:
+                    this.art += GetBoost((int) (this.art * 0.1f), effectivenessOfTask);
+                    break;
+                case ProjectTask.Gameplay:
+                    if (this.hiddenTools > 4 && this.gameplay > 15)
+                    {
+                        this.gameplay += GetBoost((int) (this.gameplay * 0.2f), effectivenessOfTask);
+                    }
+                    else
+                    {
+                        this.gameplay += GetBoost((int) (this.gameplay * 0.1f), effectivenessOfTask);
+                    }
+                    break;
+                case ProjectTask.Tools:
+                    this.hiddenTools += Random.Range(0, 2);
+                    if (this.hiddenTools > 5)
+                    {
+                        if (this.gameplay > 10)
+                        {
+                            this.gameplay += GetBoost((int) (this.gameplay * 0.1f), effectivenessOfTask);
+                        }
+                        else
+                        {
+                            this.gameplay += GetBoost(Random.Range(1, 3), effectivenessOfTask);
+                        }
+
+                        if (this.art > 10)
+                        {
+                            this.art += GetBoost((int) (this.art * 0.1f), effectivenessOfTask);
+                        }
+                        else
+                        {
+                            this.art += GetBoost(Random.Range(1, 3), effectivenessOfTask);
+                        }
+                    }
+                    else
+                    {
+                        if (this.gameplay > 15)
+                        {
+                            this.gameplay += GetBoost((int) (this.gameplay * 0.05f), effectivenessOfTask);
+                        }
+                        else
+                        {
+                            this.gameplay += GetBoost(Random.Range(1, 3), effectivenessOfTask);
+                        }
+                        
+                        if (this.art > 15)
+                        {
+                            this.art += GetBoost((int) (this.art * 0.05f), effectivenessOfTask);
+                        }
+                        else
+                        {
+                            this.art += GetBoost(Random.Range(1, 3), effectivenessOfTask);
+                        }
+
+                        
+                    }
+                    break;
+                case ProjectTask.Conference:
+                    this.marketing += GetBoost((int) (this.art * 0.1f) + (int) (this.gameplay * 0.1f), effectivenessOfTask);
+                    break;
+                case ProjectTask.SocialMedia:
+                    this.marketing += GetBoost((int) (this.art * 0.1f) + (int) (this.gameplay * 0.1f), effectivenessOfTask);
+                    break;
+                case ProjectTask.OnlineAds:
+                    this.marketing += GetBoost((int) (this.art * 0.05f) + (int) (this.gameplay * 0.05f), effectivenessOfTask);
+                    break;
+            }
+        }
+
+        private void FromZeroAdd(ProjectTask task, EffectivenessOfTask effectivenessOfTask)
         {
             switch (task)
             {
@@ -90,137 +170,106 @@ namespace Controllers
                 case ProjectTask.Tools:
                     if (this.art == 0)
                     {
-                        this.art += Random.Range(1, 5);
+                        switch (effectivenessOfTask)
+                        {
+                            case EffectivenessOfTask.Ineffective: this.art += Random.Range(1, 3); break;
+                            case EffectivenessOfTask.Effective: this.art += Random.Range(1, 5); break;
+                            case EffectivenessOfTask.CriticalHit: this.art += Random.Range(5, 10); break;
+                        }
                     }
 
                     break;
             }
-            
+
             switch (task)
             {
                 case ProjectTask.Gameplay:
                 case ProjectTask.Tools:
                     if (this.gameplay == 0)
                     {
-                        this.gameplay += Random.Range(1, 5);
+                        switch (effectivenessOfTask)
+                        {
+                            case EffectivenessOfTask.Ineffective: this.gameplay += Random.Range(1, 3); break;
+                            case EffectivenessOfTask.Effective: this.gameplay += Random.Range(1, 5); break;
+                            case EffectivenessOfTask.CriticalHit: this.gameplay += Random.Range(5, 10); break;
+                        }
                     }
 
-                    break;
-            }
-
-            int boost = 0;
-            switch (task)
-            {
-                case ProjectTask.Environment:
-                    this.art += GetBoost((int) (this.art * 0.1f));
-                    break;
-                case ProjectTask.Shaders:
-                    this.art += GetBoost((int) (this.art * 0.1f));
-                    break;
-                case ProjectTask.Models:
-                    this.art += GetBoost((int) (this.art * 0.1f));
-                    break;
-                case ProjectTask.Gameplay:
-                    if (this.hiddenTools > 4 && this.gameplay > 15)
-                    {
-                        this.gameplay += GetBoost((int) (this.gameplay * 0.2f));
-                    }
-                    else
-                    {
-                        this.gameplay += GetBoost((int) (this.gameplay * 0.1f));
-                    }
-                    break;
-                case ProjectTask.Tools:
-                    this.hiddenTools += Random.Range(0, 2);
-                    if (this.hiddenTools > 5)
-                    {
-                        if (this.gameplay > 10)
-                        {
-                            this.gameplay += GetBoost((int) (this.gameplay * 0.1f));
-                        }
-                        else
-                        {
-                            this.gameplay += Random.Range(1, 3);
-                        }
-
-                        if (this.art > 10)
-                        {
-                            this.art += GetBoost((int) (this.art * 0.1f));
-                        }
-                        else
-                        {
-                            this.art += Random.Range(1, 3);
-                        }
-                    }
-                    else
-                    {
-                        if (this.gameplay > 15)
-                        {
-                            this.gameplay += GetBoost((int) (this.gameplay * 0.05f));
-                        }
-                        else
-                        {
-                            this.gameplay += Random.Range(1, 3);
-                        }
-                        
-                        if (this.art > 15)
-                        {
-                            this.art += GetBoost((int) (this.art * 0.05f));
-                        }
-                        else
-                        {
-                            this.art += Random.Range(1, 3);
-                        }
-
-                        
-                    }
-                    break;
-                case ProjectTask.Conference:
-                    this.marketing += GetBoost((int) (this.art * 0.1f) + (int) (this.gameplay * 0.1f));
-                    break;
-                case ProjectTask.SocialMedia:
-                    this.marketing += GetBoost((int) (this.art * 0.1f) + (int) (this.gameplay * 0.1f));
-                    break;
-                case ProjectTask.OnlineAds:
-                    this.marketing += GetBoost((int) (this.art * 0.05f) + (int) (this.gameplay * 0.05f));
                     break;
             }
         }
 
-        private int GetBoost(int i)
+        private int GetBoost(int i, EffectivenessOfTask effectivenessOfTask)
         {
+            int newValue = i;
             if (i <= 0)
             {
-                return Random.Range(1, 5);
+                switch (effectivenessOfTask)
+                {
+                    case EffectivenessOfTask.Ineffective: newValue = Random.Range(1, 3); break;
+                    case EffectivenessOfTask.Effective: newValue =  Random.Range(1, 5); break;
+                    case EffectivenessOfTask.CriticalHit: newValue =  Random.Range(5, 10); break;
+                }
             }
 
-            return i;
+            switch (effectivenessOfTask)
+            {
+                case EffectivenessOfTask.Ineffective: newValue =  i / 2; break;
+                case EffectivenessOfTask.Effective: newValue =  i; break;
+                case EffectivenessOfTask.CriticalHit: newValue =  i * 2; break;
+            }
+
+            if (newValue <= 0)
+            {
+                newValue = Random.Range(1, 3);
+            }
+            
+            return newValue;
         }
 
-        private void ExecuteBugs(ProjectTask task)
+        private void ExecuteBugs(ProjectTask task, EffectivenessOfTask effectivenessOfTask)
         {
+            int changeOfBugs = 0;
             switch (task)
             {
                 case ProjectTask.Gameplay:
                 case ProjectTask.Tools:
-                    bugs += Random.Range(1, 7);
+                    changeOfBugs += Random.Range(1, 7);
                     break;
                 case ProjectTask.Environment:
                 case ProjectTask.Shaders:
-                    bugs += Random.Range(1, 10);
+                    changeOfBugs += Random.Range(1, 10);
                     break;
             }
+            
+            switch (effectivenessOfTask)
+            {
+                case EffectivenessOfTask.Ineffective: changeOfBugs *= 2; break;
+                case EffectivenessOfTask.Effective: break;
+                case EffectivenessOfTask.CriticalHit: changeOfBugs -= (int)(changeOfBugs * 0.5f); break;
+            }
+            this.bugs += bugs;
+            
 
+            changeOfBugs = 0;
             switch (task)
             {
                 case ProjectTask.Bugs:
-                    bugs -= Random.Range(20, 30);
-                    if (bugs < 0)
-                    {
-                        bugs = 0;
-                    }
-
+                    changeOfBugs = Random.Range(20, 30);
                     break;
+            }
+            
+            switch (effectivenessOfTask)
+            {
+                case EffectivenessOfTask.Ineffective: changeOfBugs /= 2; break;
+                case EffectivenessOfTask.Effective: break;
+                case EffectivenessOfTask.CriticalHit: changeOfBugs *= 2; break;
+            }
+            this.bugs -= bugs;
+            
+            if (bugs < 0)
+            {
+                bugs = 0;
             }
         }
 

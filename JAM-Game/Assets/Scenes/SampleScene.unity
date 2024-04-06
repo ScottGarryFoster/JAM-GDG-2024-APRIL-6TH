@@ -4109,6 +4109,7 @@ MonoBehaviour:
   tmpGameplay: {fileID: 591214427}
   scrollbarReach: {fileID: 307789532}
   tmpReach: {fileID: 139444195}
+  bugs: 0
 --- !u!114 &1560659173
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4137,8 +4138,8 @@ MonoBehaviour:
     Right:
       ButtonDescription: BTN LEFT - Gameplay
       TypeOfEvent: 0
-      Difficulty: 0
-      DifficultyStat: 0
+      Difficulty: 1
+      DifficultyStat: 1
       ValueToBeat: 0
       WorkTask: 3
       PlayTask: 0
@@ -4151,6 +4152,9 @@ MonoBehaviour:
   CurrentText: {fileID: 550825696}
   ButtonPanel: {fileID: 1559600156}
   PushforwardPanel: {fileID: 1608344095}
+  EasyLevel: 10
+  MedLevel: 25
+  HardLevel: 50
 --- !u!114 &1560659174
 MonoBehaviour:
   m_ObjectHideFlags: 0
