@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using DefaultNamespace;
 using TMPro;
 using Unity.VisualScripting;
 using UnityEngine;
@@ -9,11 +10,14 @@ namespace Controllers
 {
     public class GameEvents : MonoBehaviour
     {
+        [Header("Other References")]
         public GameProject GameProject;
         public PersonalSkills PersonalSkills;
+        public DayTracker DayTracker;
         
         public List<SingleEvent> Events;
 
+        [Header("UI")]
         public TMP_Text Description;
         public TMP_Text Left;
         public TMP_Text Right;
@@ -180,7 +184,18 @@ namespace Controllers
         {
             ButtonPanel.SetActive(true);
             PushforwardPanel.SetActive(false);
-            PullNewEvent();
+
+            bool moreTime = DayTracker.IncreaseDay();
+            if (moreTime)
+            {
+                PullNewEvent();
+
+            }
+            else
+            {
+                throw new NotImplementedException("Force Release");
+            }
+
         }
     }
 }
