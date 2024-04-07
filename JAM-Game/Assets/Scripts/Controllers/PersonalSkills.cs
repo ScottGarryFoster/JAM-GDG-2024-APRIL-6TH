@@ -168,5 +168,11 @@ namespace Controllers
 
             ReactToEnergyChange(cacheEnergy);
         }
+
+        public void Reset()
+        {
+            this.Energy = 0;
+            UpdateUI();
+        }
     }
 }
