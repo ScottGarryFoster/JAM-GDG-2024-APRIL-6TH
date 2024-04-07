@@ -1,4 +1,5 @@
 ﻿using System;
+using DG.Tweening;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -38,18 +39,27 @@ namespace Controllers
         [Header("OTHER")]
         public PersonalSkills PersonalSkills;
 
+        public ScrollBar ScrollBarTweener;
+
+        private void Start()
+        {
+            ScrollBarTweener.GiveScrollBar("looks", this.scrollbarLooks, this.tmpLooks);
+            ScrollBarTweener.GiveScrollBar("gameplay", this.scrollbarGameplay, this.tmpGameplay);
+            ScrollBarTweener.GiveScrollBar("reach", this.scrollbarReach, this.tmpReach);
+        }
+        
         public void Reset()
         {
-            
-            
             art = 0;
             gameplay = 0;
             marketing = 0;
+            UpdateUI();
         }
 
         public void WorkOnPrograming()
         {
-            WorkOnProject(ProjectTask.Gameplay);
+            ScrollBarTweener.ShakeBad("looks");
+            //WorkOnProject(ProjectTask.Gameplay);
         }
         
         public void WorkOnTools()
@@ -74,6 +84,10 @@ namespace Controllers
 
         public void WorkOnProject(ProjectTask task, EffectivenessOfTask effectivenessOfTask = EffectivenessOfTask.Effective)
         {
+            int cacheLooks = this.art;
+            int cacheGameplay = this.gameplay;
+            int cacheReach = this.marketing;
+            
             ExecuteBugs(task, effectivenessOfTask);
             
             MainTasks(task, effectivenessOfTask);
@@ -82,7 +96,39 @@ namespace Controllers
             
             UpdateUI();
 
+            ReactToChanges(cacheLooks, this.art, cacheGameplay, this.gameplay, cacheReach, this.marketing);
+            
             TakeEnergy(effectivenessOfTask);
+        }
+
+        private void ReactToChanges(int cacheLooks, int currentLooks, int cacheGameplay, int currentGameplay, int cacheReach, int currentReach)
+        {
+            if (cacheLooks < currentLooks)
+            {
+                ScrollBarTweener.ShakeGood("looks");
+            }
+            else if (cacheLooks > currentLooks)
+            {
+                ScrollBarTweener.ShakeBad("looks");
+            }
+            
+            if (cacheGameplay < currentGameplay)
+            {
+                ScrollBarTweener.ShakeGood("gameplay");
+            }
+            else if (cacheGameplay > currentGameplay)
+            {
+                ScrollBarTweener.ShakeBad("gameplay");
+            }
+            
+            if (cacheReach < currentReach)
+            {
+                ScrollBarTweener.ShakeGood("reach");
+            }
+            else if (cacheReach > currentReach)
+            {
+                ScrollBarTweener.ShakeBad("reach");
+            }
         }
 
         private void TakeEnergy(EffectivenessOfTask effectivenessOfTask)
@@ -330,16 +376,22 @@ namespace Controllers
 
         public void AddGameplayBoost(int amount)
         {
+            int gameplayBefore = this.gameplay;
             this.gameplay += amount;
             ClampAllStats();
             this.UpdateUI();
+            
+            ReactToChanges(0, 0, gameplayBefore, this.gameplay, 0, 0);
         }
         
         public void AddReachBoost(int amount)
         {
+            int reachBefore = this.marketing;
             this.marketing += amount;
             ClampAllStats();
             this.UpdateUI();
+            
+            ReactToChanges(0, 0, 0, 0, reachBefore, this.marketing);
         }
     }
 }

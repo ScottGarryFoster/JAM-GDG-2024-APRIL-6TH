@@ -4230,6 +4230,7 @@ GameObject:
   - component: {fileID: 1560659173}
   - component: {fileID: 1560659174}
   - component: {fileID: 1560659175}
+  - component: {fileID: 1560659176}
   m_Layer: 0
   m_Name: GameController
   m_TagString: Untagged
@@ -4276,6 +4277,7 @@ MonoBehaviour:
   tmpReach: {fileID: 139444195}
   bugs: 0
   PersonalSkills: {fileID: 1560659175}
+  ScrollBarTweener: {fileID: 1560659176}
 --- !u!114 &1560659173
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4483,6 +4485,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6054dca0600af7c46989e5a05d6a0fea, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  GameProject: {fileID: 1560659172}
   GameEvents: {fileID: 1560659173}
   PersonalSkills: {fileID: 1560659175}
 --- !u!114 &1560659175
@@ -4503,6 +4506,19 @@ MonoBehaviour:
   ScrollbarEnergy: {fileID: 113563950}
   TextEnergy: {fileID: 1809624971}
   GameProject: {fileID: 1560659172}
+  ScrollBarTweener: {fileID: 1560659176}
+--- !u!114 &1560659176
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1560659170}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 85d8de813eb4b25478df831fa210a34e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1561491571
 GameObject:
   m_ObjectHideFlags: 0

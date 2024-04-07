@@ -19,8 +19,16 @@ namespace Controllers
         [Header("Other Stats")]
         public GameProject GameProject;
         
+        public ScrollBar ScrollBarTweener;
+
+        private void Start()
+        {
+            ScrollBarTweener.GiveScrollBar("energy", ScrollbarEnergy, TextEnergy);
+        }
+        
         public void PersonalTask(PlayTask playTask, EffectivenessOfTask effectivenessOfTask)
         {
+            int cacheEnergy = Energy;
             // Add random events in here
             switch (playTask)
             {
@@ -44,8 +52,22 @@ namespace Controllers
             }
             
             UpdateUI();
+
+            ReactToEnergyChange(cacheEnergy);
         }
-        
+
+        private void ReactToEnergyChange(int cacheEnergy)
+        {
+            if (Energy > cacheEnergy)
+            {
+                ScrollBarTweener.ShakeGood("energy");
+            }
+            else if (Energy < cacheEnergy)
+            {
+                ScrollBarTweener.ShakeBad("energy");
+            }
+        }
+
         private void RandomSocialMediaEvent(int energy, EffectivenessOfTask effectivenessOfTask)
         {
             int random = CreateRandomRangeToBeatFromEffectiveness(effectivenessOfTask);
@@ -136,12 +158,15 @@ namespace Controllers
 
         public void TakeEnergy(int takeAmount)
         {
+            int cacheEnergy = this.Energy;
             this.Energy -= takeAmount;
             if (this.Energy < 0)
             {
                 this.Energy = 0;
             }
             UpdateUI();
+
+            ReactToEnergyChange(cacheEnergy);
         }
     }
 }
