@@ -17,6 +17,7 @@ namespace Controllers
         public ReleaseGame ReleaseGame;
         
         public List<SingleEvent> Events;
+        public List<SingleEvent> BugEvents;
         public Dictionary<SingleEvent, int> TimesTracker;
 
         [Header("UI")]
@@ -41,6 +42,8 @@ namespace Controllers
         private List<SingleEvent> toBeReAdded;
 
         private bool ifLoaded;
+
+        private bool haveAddedBugTasksThisGame;
         
         private void Start()
         {
@@ -71,6 +74,12 @@ namespace Controllers
             if (ShouldReAddToQueue(this.currentEvent))
             {
                 toBeReAdded.Add(this.currentEvent);
+            }
+
+            if (!haveAddedBugTasksThisGame || GameProject.ShouldPullBugTask())
+            {
+                toBeReAdded.AddRange(BugEvents);
+                haveAddedBugTasksThisGame = true;
             }
         }
 
@@ -299,6 +308,7 @@ namespace Controllers
 
         public void Reset()
         {
+            haveAddedBugTasksThisGame = false;
             LoadEvents();
             PullNewEvent();
         }

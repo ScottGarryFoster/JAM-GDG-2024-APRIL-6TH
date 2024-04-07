@@ -12249,6 +12249,32 @@ MonoBehaviour:
     RetainInPool: 1
     OverrideTimesInPool: 0
     OverrideTimesInPoolAmount: 10
+  BugEvents:
+  - Description: Your game just crashed. You could work on that or you could ignore
+      it entirely?
+    Left:
+      ButtonDescription: Fix Bugs
+      TypeOfEvent: 0
+      Difficulty: 1
+      DifficultyStat: 1
+      ValueToBeat: 0
+      WorkTask: 4
+      PlayTask: 0
+      SuccessText: You fixed those bugs like they were nothing!
+      FailureText: You added more bugs. Great.
+    Right:
+      ButtonDescription: Play Mobile Games
+      TypeOfEvent: 1
+      Difficulty: 0
+      DifficultyStat: 5
+      ValueToBeat: 0
+      WorkTask: 0
+      PlayTask: 0
+      SuccessText: You took a breather to play some games.
+      FailureText: 
+    RetainInPool: 1
+    OverrideTimesInPool: 0
+    OverrideTimesInPoolAmount: 0
   Description: {fileID: 550825696}
   Left: {fileID: 827696834}
   Right: {fileID: 725034608}

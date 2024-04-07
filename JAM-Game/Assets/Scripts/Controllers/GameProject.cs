@@ -406,5 +406,10 @@ namespace Controllers
             
             ReactToChanges(0, 0, 0, 0, reachBefore, this.marketing);
         }
+
+        public bool ShouldPullBugTask()
+        {
+            return bugs > 50;
+        }
     }
 }
