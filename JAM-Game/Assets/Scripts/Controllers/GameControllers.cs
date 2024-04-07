@@ -10,6 +10,7 @@ public class GameControllers : MonoBehaviour
     public GameEvents GameEvents;
     public PersonalSkills PersonalSkills;
     public DayTracker DayTracker;
+    public ReleaseGame ReleaseGame;
     
     // Start is called before the first frame update
     void Start()
@@ -19,6 +20,7 @@ public class GameControllers : MonoBehaviour
 
     public void StartANewGame()
     {
+        ReleaseGame.Reset();
         DayTracker.Reset();
         GameProject.Reset();
         GameEvents.Reset();

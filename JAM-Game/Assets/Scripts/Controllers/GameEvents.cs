@@ -14,6 +14,7 @@ namespace Controllers
         public GameProject GameProject;
         public PersonalSkills PersonalSkills;
         public DayTracker DayTracker;
+        public ReleaseGame ReleaseGame;
         
         public List<SingleEvent> Events;
         public Dictionary<SingleEvent, int> TimesTracker;
@@ -65,6 +66,11 @@ namespace Controllers
 
         private bool ShouldReAddToQueue(SingleEvent singleEvent)
         {
+            if (singleEvent.RetainInPool)
+            {
+                return true;
+            }
+            
             int timesLeftToUse = 0;
             if (TimesTracker.TryGetValue(singleEvent, out int value))
             {
@@ -85,6 +91,11 @@ namespace Controllers
 
         private int CalculateTimesBeforeDequeue(SingleEvent singleEvent)
         {
+            if (singleEvent.OverrideTimesInPool)
+            {
+                return singleEvent.OverrideTimesInPoolAmount;
+            }
+            
             if (singleEvent.Left.Difficulty == DifficultyOfEvent.Hard &&
                 singleEvent.Right.Difficulty == DifficultyOfEvent.Hard)
             {
@@ -114,15 +125,16 @@ namespace Controllers
         
         private float CalculateTimesBeforeDequeue(DifficultyOfEvent difficulty)
         {
+            float times = 0;
             switch (difficulty)
             {
-                case DifficultyOfEvent.Guaranteed: return 0.5f;
-                case DifficultyOfEvent.Easy: return 1.5f;
-                case DifficultyOfEvent.Medium: return 2.5f;
-                case DifficultyOfEvent.Hard: return 4f;
+                case DifficultyOfEvent.Guaranteed: times = 0.5f; break;
+                case DifficultyOfEvent.Easy: times = 1.5f; break;
+                case DifficultyOfEvent.Medium: times = 2.5f; break;
+                case DifficultyOfEvent.Hard: times = 4f; break;
             }
 
-            return 0.5f;
+            return times * 2;
         }
 
         private string SetOptionButtonText(EventOption option)
@@ -258,7 +270,7 @@ namespace Controllers
             }
             else
             {
-                throw new NotImplementedException("Force Release");
+                ReleaseGame.DoReleaseGame();
             }
 
         }

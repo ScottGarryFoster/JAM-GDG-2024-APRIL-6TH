@@ -53,6 +53,7 @@ namespace Controllers
             art = 0;
             gameplay = 0;
             marketing = 0;
+            this.bugs = 0;
             UpdateUI();
         }
 
@@ -147,11 +148,17 @@ namespace Controllers
         private void ClampAllStats()
         {
             this.art = this.art < this.skillsMax ? this.art : this.skillsMax;
+            this.art = 0 > this.art  ? 0 : this.art;
             this.gameplay = this.gameplay < this.skillsMax ? this.gameplay : this.skillsMax;
+            this.gameplay = 0 > this.gameplay  ? 0 : this.gameplay;
             this.marketing = this.marketing < this.skillsMax ? this.marketing : this.skillsMax;
+            this.marketing = 0 > this.marketing  ? 0 : this.marketing;
             this.hiddenTools = this.hiddenTools < this.skillsMax ? this.hiddenTools : this.skillsMax;
+            this.hiddenTools = 0 > this.hiddenTools  ? 0 : this.hiddenTools;
             this.hiddenGameplay = this.hiddenGameplay < this.skillsMax ? this.hiddenGameplay : this.skillsMax;
+            this.hiddenGameplay = 0 > this.hiddenGameplay  ? 0 : this.hiddenGameplay;
             this.bugs = this.bugs < this.skillsMax ? this.bugs : this.skillsMax;
+            this.bugs = 0 > this.bugs  ? 0 : this.bugs;
         }
 
         private void MainTasks(ProjectTask task, EffectivenessOfTask effectivenessOfTask)
@@ -236,15 +243,15 @@ namespace Controllers
                     break;
             }
 
-            if (this.bugs > 75)
+            if ((this.gameplay >= 60 && this.art >= 60) && this.bugs > 75)
             {
-                this.gameplay -= Random.Range(0, 5);
-                this.art -= Random.Range(0, 5);
+                this.gameplay -= Random.Range(0, 4);
+                this.art -= Random.Range(0, 4);
             }
-            else if (this.bugs > 50)
+            else if ((this.gameplay >= 40 && this.art >= 40) && this.bugs > 50)
             {
-                this.gameplay -= Random.Range(0, 3);
-                this.art -= Random.Range(0, 3);
+                this.gameplay -= Random.Range(0, 2);
+                this.art -= Random.Range(0, 2);
             }
         }
 
@@ -317,6 +324,12 @@ namespace Controllers
 
         private void ExecuteBugs(ProjectTask task, EffectivenessOfTask effectivenessOfTask)
         {
+            if ((this.gameplay < 25 && this.art < 25))
+            {
+                // You do not gain bugs until there is a product.
+                return;
+            }
+            
             int changeOfBugs = 0;
             switch (task)
             {
@@ -336,7 +349,7 @@ namespace Controllers
                 case EffectivenessOfTask.Effective: break;
                 case EffectivenessOfTask.CriticalHit: changeOfBugs -= (int)(changeOfBugs * 0.5f); break;
             }
-            this.bugs += bugs;
+            this.bugs += changeOfBugs;
             
 
             changeOfBugs = 0;
@@ -353,7 +366,7 @@ namespace Controllers
                 case EffectivenessOfTask.Effective: break;
                 case EffectivenessOfTask.CriticalHit: changeOfBugs *= 2; break;
             }
-            this.bugs -= bugs;
+            this.bugs -= changeOfBugs;
             
             if (bugs < 0)
             {

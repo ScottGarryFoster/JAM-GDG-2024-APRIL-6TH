@@ -11,8 +11,11 @@ namespace Controllers
         public EventOption Right;
 
         /// <summary>
-        /// True means take out of the pool once used.
+        /// True means this will remain in the pool no matter the difficulty.
         /// </summary>
-        public bool OnlyUseOnce;
+        public bool RetainInPool;
+
+        public bool OverrideTimesInPool;
+        public int OverrideTimesInPoolAmount;
     }
 }
