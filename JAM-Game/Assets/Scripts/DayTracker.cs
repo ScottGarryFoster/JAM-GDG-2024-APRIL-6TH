@@ -26,7 +26,7 @@ namespace DefaultNamespace
         public void Reset()
         {
             int maxDays = GetDaysForDifficulty(CurrentDifficulty);
-            DifficultyText.text = $"Make a game in {maxDays}!";
+            DifficultyText.text = $"Make a game in {maxDays} days!";
             CurrentDay = 0;
             UpdateUI();
         }
@@ -56,7 +56,7 @@ namespace DefaultNamespace
         public void UpdateUI()
         {
             int maxDays = GetDaysForDifficulty(CurrentDifficulty);
-            DayCounterText.text = $"{maxDays-CurrentDay} till release";   
+            DayCounterText.text = $"{maxDays-CurrentDay} days till release";   
         }
 
         public void SetEasy()

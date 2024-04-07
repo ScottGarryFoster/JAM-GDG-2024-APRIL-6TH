@@ -12318,9 +12318,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 23e9234b316b4942ac422e8620881ca0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  MaxDaysEasy: 365
-  MaxDaysMedium: 180
-  MaxDaysHard: 90
+  MaxDaysEasy: 200
+  MaxDaysMedium: 150
+  MaxDaysHard: 100
   CurrentDay: 0
   CurrentDifficulty: 1
   DifficultyText: {fileID: 588312607}

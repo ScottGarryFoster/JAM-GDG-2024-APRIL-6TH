@@ -35,6 +35,11 @@ namespace Controllers
         private Queue<SingleEvent> eventsInPlay;
         private SingleEvent currentEvent;
 
+        /// <summary>
+        /// List of pending new items in queue;
+        /// </summary>
+        private List<SingleEvent> toBeReAdded;
+
         private bool ifLoaded;
         
         private void Start()
@@ -51,6 +56,11 @@ namespace Controllers
             {
                 LoadEvents();
             }
+
+            if (!this.eventsInPlay.Any())
+            {
+                RefillQueue();
+            }
             
             this.currentEvent = this.eventsInPlay.Dequeue();
 
@@ -60,8 +70,19 @@ namespace Controllers
 
             if (ShouldReAddToQueue(this.currentEvent))
             {
-                this.eventsInPlay.Enqueue(this.currentEvent);
+                toBeReAdded.Add(this.currentEvent);
             }
+        }
+
+        private void RefillQueue()
+        {
+            List<SingleEvent> shuffled = IHateStatics.Shuffle(this.toBeReAdded, new System.Random());
+            foreach (SingleEvent se in shuffled)
+            {
+                this.eventsInPlay.Enqueue(se);
+            }
+            
+            this.toBeReAdded.Clear();
         }
 
         private bool ShouldReAddToQueue(SingleEvent singleEvent)
@@ -161,10 +182,10 @@ namespace Controllers
         {
             switch (optionDifficulty)
             {
-                case DifficultyOfEvent.Guaranteed: return "<color=#008000>[V.EASY]</color>";
-                case DifficultyOfEvent.Easy: return "<color=#008000>[EASY]</color>";
-                case DifficultyOfEvent.Medium: return "<color=#FF5733>[MED]</color>";
-                case DifficultyOfEvent.Hard: return "<color=#990000>[HARD]</color>";
+                case DifficultyOfEvent.Guaranteed: return "<b><color=#008000>[V.EASY]</color></b>";
+                case DifficultyOfEvent.Easy: return "<b><color=#008000>[EASY]</color></b>";
+                case DifficultyOfEvent.Medium: return "<b><color=#5865F2>[MED]</color></b>";
+                case DifficultyOfEvent.Hard: return "<b><color=#990000>[HARD]</color></b>";
                 default: throw new NotImplementedException($"{optionDifficulty.ToString()} not implemented");
             }
             
@@ -172,6 +193,7 @@ namespace Controllers
 
         private void LoadEvents()
         {
+            this.toBeReAdded = new List<SingleEvent>();
             TimesTracker = new Dictionary<SingleEvent, int>();
             this.eventsInPlay = new Queue<SingleEvent>();
             List<SingleEvent> shuffled = IHateStatics.Shuffle(this.Events, new System.Random());
