@@ -5953,6 +5953,32 @@ MonoBehaviour:
         finger tips.
       FailureText: You can't take your mind of the bug. You find it hard to relax.
     OnlyUseOnce: 0
+  - Description: 'Your textures look strange and your character runs funny. You need
+      to do something. '
+    Left:
+      ButtonDescription: Fix Textures
+      TypeOfEvent: 0
+      Difficulty: 2
+      DifficultyStat: 0
+      ValueToBeat: 0
+      WorkTask: 0
+      PlayTask: 0
+      SuccessText: The shaders compiled incorrectly. You fixed the simple error and
+        everything is at least looking alright.
+      FailureText: The shader errors are piling up and now the world is all pink.
+    Right:
+      ButtonDescription: Fix Player
+      TypeOfEvent: 0
+      Difficulty: 2
+      DifficultyStat: 1
+      ValueToBeat: 0
+      WorkTask: 3
+      PlayTask: 0
+      SuccessText: You work on a new player controller and this one is working far
+        better than before.
+      FailureText: Something is firing when it should not in the player controller.
+        Back to the drawing board!
+    OnlyUseOnce: 0
   Description: {fileID: 550825696}
   Left: {fileID: 827696834}
   Right: {fileID: 725034608}

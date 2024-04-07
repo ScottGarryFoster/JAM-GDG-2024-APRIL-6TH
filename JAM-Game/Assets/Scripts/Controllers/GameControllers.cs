@@ -21,7 +21,7 @@ public class GameControllers : MonoBehaviour
     {
         DayTracker.Reset();
         GameProject.Reset();
-        GameEvents.PullNewEvent();
+        GameEvents.Reset();
         PersonalSkills.Reset();
     }
 }

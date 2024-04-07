@@ -16,6 +16,7 @@ namespace Controllers
         public DayTracker DayTracker;
         
         public List<SingleEvent> Events;
+        public Dictionary<SingleEvent, int> TimesTracker;
 
         [Header("UI")]
         public TMP_Text Description;
@@ -56,10 +57,72 @@ namespace Controllers
             this.Left.text = SetOptionButtonText(this.currentEvent.Left);
             this.Right.text = SetOptionButtonText(this.currentEvent.Right);
 
-            if (!this.currentEvent.OnlyUseOnce)
+            if (ShouldReAddToQueue(this.currentEvent))
             {
                 this.eventsInPlay.Enqueue(this.currentEvent);
             }
+        }
+
+        private bool ShouldReAddToQueue(SingleEvent singleEvent)
+        {
+            int timesLeftToUse = 0;
+            if (TimesTracker.TryGetValue(singleEvent, out int value))
+            {
+                TimesTracker[singleEvent] = value - 1;
+                
+                timesLeftToUse = value;
+            }
+            else
+            {
+                int getTimesLeft = CalculateTimesBeforeDequeue(singleEvent) - 1;
+                TimesTracker.Add(singleEvent, getTimesLeft);
+
+                timesLeftToUse = getTimesLeft;
+            }
+
+            return timesLeftToUse > 0;
+        }
+
+        private int CalculateTimesBeforeDequeue(SingleEvent singleEvent)
+        {
+            if (singleEvent.Left.Difficulty == DifficultyOfEvent.Hard &&
+                singleEvent.Right.Difficulty == DifficultyOfEvent.Hard)
+            {
+                return 1000;
+            }
+            if (singleEvent.Left.Difficulty == DifficultyOfEvent.Hard &&
+                singleEvent.Right.Difficulty == DifficultyOfEvent.Medium)
+            {
+                return 1000;
+            }
+            if (singleEvent.Left.Difficulty == DifficultyOfEvent.Medium &&
+                singleEvent.Right.Difficulty == DifficultyOfEvent.Hard)
+            {
+                return 1000;
+            }
+            if (singleEvent.Left.Difficulty == DifficultyOfEvent.Medium &&
+                singleEvent.Right.Difficulty == DifficultyOfEvent.Medium)
+            {
+                return 1000;
+            }
+            
+            float leftCalcuation = CalculateTimesBeforeDequeue(singleEvent.Left.Difficulty);
+            float rightCalcuation = CalculateTimesBeforeDequeue(singleEvent.Right.Difficulty);
+
+            return (int)(leftCalcuation + rightCalcuation);
+        }
+        
+        private float CalculateTimesBeforeDequeue(DifficultyOfEvent difficulty)
+        {
+            switch (difficulty)
+            {
+                case DifficultyOfEvent.Guaranteed: return 0.5f;
+                case DifficultyOfEvent.Easy: return 1.5f;
+                case DifficultyOfEvent.Medium: return 2.5f;
+                case DifficultyOfEvent.Hard: return 4f;
+            }
+
+            return 0.5f;
         }
 
         private string SetOptionButtonText(EventOption option)
@@ -97,11 +160,13 @@ namespace Controllers
 
         private void LoadEvents()
         {
+            TimesTracker = new Dictionary<SingleEvent, int>();
             this.eventsInPlay = new Queue<SingleEvent>();
             List<SingleEvent> shuffled = IHateStatics.Shuffle(this.Events, new System.Random());
             foreach (SingleEvent eo in shuffled)
             {
                 this.eventsInPlay.Enqueue(eo);
+                TimesTracker.Add(eo, CalculateTimesBeforeDequeue(eo));
             }
 
             this.Left.richText = true;
@@ -196,6 +261,12 @@ namespace Controllers
                 throw new NotImplementedException("Force Release");
             }
 
+        }
+
+        public void Reset()
+        {
+            LoadEvents();
+            PullNewEvent();
         }
     }
 }
