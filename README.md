@@ -1,5 +1,6 @@
 # Game Jam - Game Maker Simulator
 This is a game jam repo for a Jam over 48 Hours for the GDG jam in April 2024.
+[Play here](https://scottgarryfoster.itch.io/game-maker-simulator).
 
 This was a solo game jam and the goal was simply to attempt to create something I had not created before. In previous Jam projects I make what I know, platformers, top-down action, or puzzle games. For this project I decided to just try something I had never and went with an incremental style game in which you attempt to create a successful video game.
 
